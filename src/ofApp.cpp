@@ -6,26 +6,52 @@ using namespace ofxCv;
 void ofApp::setup(){
     ofSetVerticalSync(true);
     ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
+    ofBackground(0,0,0);
     
-    cam.initGrabber(640, 480);
+    WIDTH = ofGetScreenWidth();
+    WIDTH = 1024;
+    HEIGHT = ofGetScreenHeight();
+    HEIGHT = 768;
+    
+    fbo.allocate(WIDTH, HEIGHT);
+    fbo.begin();
+    ofClear(255,255,255, 0);
+    fbo.end();
+    
+    ofDisableArbTex();
+    
+    noiseTex.load("noiseTex.png");
+    
+    cam.initGrabber(1024, 768);
+    
+    shader.load("distortion.vert", "distortion.frag");
     
     tracker.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
     cam.update();
     if(cam.isFrameNew()) {
-        tracker.update(toCv(cam));
+//        tracker.update(toCv(cam));
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    shader.begin();
+    shader.setUniformTexture("srcTex", cam.getTexture(), 1);
+    shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
+    shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
+    shader.setUniform1f("u_time", ofGetElapsedTimef());
+//    fbo.draw(0,0);
     cam.draw(0, 0);
-    ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10, 20);
+    shader.end();
     
+
     if(tracker.getFound()) {
+//        cam.draw(0, 0);
         ofSetLineWidth(1);
         tracker.draw();
     }
@@ -34,7 +60,9 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    if (key=='l') {
+        shader.load("distortion.vert", "distortion.frag");
+    }
 }
 
 //--------------------------------------------------------------
