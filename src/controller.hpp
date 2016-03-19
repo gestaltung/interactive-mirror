@@ -18,18 +18,29 @@ using namespace std;
 class GSTController {
     public:
     void setAccessTokens();
-    ofxJSONElement getAggregateData();
+    void setDate(string _date);
+    void setAggregateData();
 
     const string USER_ID = "56b8dee9dc6b20e576447b91";
     const string APP_URL = "http://localhost:3000/";
     string movesAccessToken;
     string fitbitAccessToken;
     string userID;
-    ofxJSONElement json;
+    string currentDate;
+    
+    // Metrics
+    float walkingDuration;
+    float walkingDistance;
+    float transportDuration;
+    float transportDistance;
+    float overallDistance;
+    float totalSteps;
+
     
     GSTController();
     
     private:
+//    ofxJSONElement response;
 //    void setMovesAccessToken();
 //    void setFitbitAccessToken();
     

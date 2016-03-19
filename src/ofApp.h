@@ -50,6 +50,7 @@ class ofApp : public ofBaseApp{
         ofMatrix4x4 pose;
         
         ofEasyCam easyCam;
+        ofTrueTypeFont font;
     
         // JSON requests
         GSTController controller;

@@ -5,7 +5,7 @@ using namespace ofxCv;
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
+//    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
     ofBackground(0,0,0);
     ofSetFrameRate(60);
     
@@ -19,14 +19,17 @@ void ofApp::setup(){
     ofClear(255,255,255, 0);
     fbo.end();
     
-    ofEnableNormalizedTexCoords();
-    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
+//    ofEnableNormalizedTexCoords();
+//    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
     ofDisableArbTex();
     
     controller.setAccessTokens();
-    cout << controller.movesAccessToken;
+    controller.setDate("20160316");
+    controller.setAggregateData();
     
     noiseTex.load("noiseTex.png");
+    
+    font.load("futura.ttf", 24);
     
     cam.initGrabber(1024, 768);
     
@@ -58,14 +61,20 @@ void ofApp::draw(){
     cam.draw(0, 0);
     fbo.end();
     fbo.draw(0,0);
-    shader.end();
-    
 
-    if(tracker.getFound()) {
+    shader.end();
+
+    ofColor(255, 255, 255);
+
+    font.drawString(controller.currentDate, 100, 160);
+    font.drawString(ofToString(controller.overallDistance) + " KM", 100, 100);
+    font.drawString(ofToString(controller.totalSteps) + " STEPS", 100, 130);    
+    
+//    if(tracker.getFound()) {
 //        cam.draw(0, 0);
-        ofSetLineWidth(1);
-        tracker.draw();
-    }
+//        ofSetLineWidth(1);
+//        tracker.draw();
+//    }
 
 }
 
