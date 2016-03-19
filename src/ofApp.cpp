@@ -7,6 +7,7 @@ void ofApp::setup(){
     ofSetVerticalSync(true);
     ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
     ofBackground(0,0,0);
+    ofSetFrameRate(60);
     
     WIDTH = ofGetScreenWidth();
     WIDTH = 1024;
@@ -18,7 +19,12 @@ void ofApp::setup(){
     ofClear(255,255,255, 0);
     fbo.end();
     
+    ofEnableNormalizedTexCoords();
+    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
     ofDisableArbTex();
+    
+    controller.setAccessTokens();
+    cout << controller.movesAccessToken;
     
     noiseTex.load("noiseTex.png");
     
@@ -27,15 +33,18 @@ void ofApp::setup(){
     shader.load("distortion.vert", "distortion.frag");
     
     tracker.setup();
+    
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     cam.update();
-    if(cam.isFrameNew()) {
-//        tracker.update(toCv(cam));
-    }
+//    if(cam.isFrameNew()) {
+//        if (ofGetFrameNum() % 60 == 0) {
+//            tracker.update(toCv(cam));
+//        }
+//    }
 }
 
 //--------------------------------------------------------------
@@ -45,8 +54,10 @@ void ofApp::draw(){
     shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
     shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
     shader.setUniform1f("u_time", ofGetElapsedTimef());
-//    fbo.draw(0,0);
+    fbo.begin();
     cam.draw(0, 0);
+    fbo.end();
+    fbo.draw(0,0);
     shader.end();
     
 

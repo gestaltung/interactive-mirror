@@ -42,7 +42,8 @@ vec4 noise( in vec2 p ) {
 void main()
 {
      vec2 p = gl_FragCoord.xy / u_resolution;
-     vec4 tex = texture2D(srcTex, p);
+     // Can use tc in place of p here
+     vec4 tex = texture2D(srcTex, tc);
      vec4 c = vec4(0.0,0.0,0.0,1.0);
 
      // Elevating shift values to some high power (between 8 and 16 looks good)

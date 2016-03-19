@@ -1,5 +1,6 @@
 varying vec2 tc;
 varying vec4 color;
+uniform float u_time;
 
 void main() {
         color = gl_Color;

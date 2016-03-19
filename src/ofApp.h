@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
+#include "ofxJSON.h"
+#include "controller.hpp"
 
 using namespace ofxCv;
 using namespace cv;
@@ -31,6 +33,7 @@ class ofApp : public ofBaseApp{
     
     
         ofVideoGrabber cam;
+        ofVideoGrabber cam2;
         ofxFaceTracker tracker;
         ofVec2f position;
         float scale;
@@ -47,6 +50,11 @@ class ofApp : public ofBaseApp{
         ofMatrix4x4 pose;
         
         ofEasyCam easyCam;
-        
+    
+        // JSON requests
+        GSTController controller;
+//    std::string userId = "56b8dee9dc6b20e576447b91";
+//    ofxJSONElement json;
+//    std::string movesAccessToken;
 		
 };
