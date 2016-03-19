@@ -66,9 +66,11 @@ void ofApp::draw(){
 
     ofColor(255, 255, 255);
 
-    font.drawString(controller.currentDate, 100, 160);
-    font.drawString(ofToString(controller.overallDistance) + " KM", 100, 100);
-    font.drawString(ofToString(controller.totalSteps) + " STEPS", 100, 130);    
+    font.drawString(controller.currentDate.substr(0,4), 20, HEIGHT-80);
+    font.drawString("/" + controller.currentDate.substr(4,2), 130, HEIGHT-80);
+    font.drawString("/" + controller.currentDate.substr(6,2), 205, HEIGHT-80);
+    font.drawString(ofToString(controller.overallDistance) + " KM", 20, HEIGHT-40);
+    font.drawString(ofToString(controller.totalSteps) + " STEPS", 20, HEIGHT-10);
     
 //    if(tracker.getFound()) {
 //        cam.draw(0, 0);
@@ -82,6 +84,16 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     if (key=='l') {
         shader.load("distortion.vert", "distortion.frag");
+    }
+    
+    if (key==OF_KEY_LEFT) {
+        controller.setDate("20160314");
+        controller.setAggregateData();
+    }
+    
+    if (key==OF_KEY_RIGHT) {
+        controller.setDate("20160315");
+        controller.setAggregateData();
     }
 }
 
