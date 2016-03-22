@@ -12,16 +12,21 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "ofxJSON.h"
+#include "ofxCv.h"
+#include "ofxFaceTracker.h"
 
 using namespace std;
 
-class GSTController {
+class GSTController : public ofThread {
     public:
     void setAccessTokens();
     void setDate(string _date);
     void setAggregateData();
+    
+    // the thread function
+    void threadedFunction();
 
-    const string USER_ID = "56b8dee9dc6b20e576447b91";
+    const string USER_ID = "56ee6e2bed8de9a62ef25452";
     const string APP_URL = "http://localhost:3000/";
     string movesAccessToken;
     string fitbitAccessToken;
@@ -35,8 +40,8 @@ class GSTController {
     float transportDistance;
     float overallDistance;
     float totalSteps;
-
     
+
     GSTController();
     
     private:

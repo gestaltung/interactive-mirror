@@ -23,6 +23,15 @@ void ofApp::setup(){
 //    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
     ofDisableArbTex();
     
+    
+    // start the controller thread
+//    controller.cam.initGrabber(1024, 768);
+//    controller.tracker.setup();
+//    controller.startThread(true);    // blocking, non verbose
+    
+    // Start the camera thread
+    cameraThread.start();
+    
     controller.setAccessTokens();
     controller.setDate("20160316");
     controller.setAggregateData();
@@ -30,22 +39,29 @@ void ofApp::setup(){
     noiseTex.load("noiseTex.png");
     
     font.load("futura.ttf", 24);
-    
-    cam.initGrabber(1024, 768);
+
+
+//    cam.initGrabber(1024, 768);
     
     shader.load("distortion.vert", "distortion.frag");
     
-    tracker.setup();
+//    tracker.setup();
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
-    cam.update();
-//    if(cam.isFrameNew()) {
+//    cameraThread.cam.update();
+    
+    // Lock access to the incoming camera resource
+//    controller.lock();
+    
+    // Release access to camera resource
+//    controller.unlock();
+//    if(controller.cam.isFrameNew()) {
 //        if (ofGetFrameNum() % 60 == 0) {
-//            tracker.update(toCv(cam));
+//            controller.tracker.update(toCv(controller.cam));
 //        }
 //    }
 }
@@ -53,16 +69,28 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     shader.begin();
-    shader.setUniformTexture("srcTex", cam.getTexture(), 1);
+//    shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
+    
+    shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
     shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
     shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
     shader.setUniform1f("u_time", ofGetElapsedTimef());
     fbo.begin();
-    cam.draw(0, 0);
+//    cam.draw(0, 0);
+//    controller.lock();
+//    controller.cam.draw(0,0);
+    cameraThread.drawCamera();
+//    if(controller.tracker.getFound()) {
+//        ofSetLineWidth(1);
+//        controller.tracker.draw();
+//    }
+//    controller.unlock();
+
     fbo.end();
     fbo.draw(0,0);
 
     shader.end();
+    cameraThread.drawCamera();
 
     ofColor(255, 255, 255);
 
@@ -71,6 +99,7 @@ void ofApp::draw(){
     font.drawString("/" + controller.currentDate.substr(6,2), 205, HEIGHT-80);
     font.drawString(ofToString(controller.overallDistance) + " KM", 20, HEIGHT-40);
     font.drawString(ofToString(controller.totalSteps) + " STEPS", 20, HEIGHT-10);
+    
     
 //    if(tracker.getFound()) {
 //        cam.draw(0, 0);
@@ -95,6 +124,11 @@ void ofApp::keyPressed(int key){
         controller.setDate("20160315");
         controller.setAggregateData();
     }
+}
+
+//--------------------------------------------------------------
+void ofApp::exit() {
+    cameraThread.stopThread();
 }
 
 //--------------------------------------------------------------

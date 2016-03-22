@@ -5,6 +5,7 @@
 #include "ofxFaceTracker.h"
 #include "ofxJSON.h"
 #include "controller.hpp"
+#include "cameraThread.hpp"
 
 using namespace ofxCv;
 using namespace cv;
@@ -18,6 +19,7 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+        void exit();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -32,9 +34,9 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
     
     
-        ofVideoGrabber cam;
-        ofVideoGrabber cam2;
-        ofxFaceTracker tracker;
+//        ofVideoGrabber cam;
+//        ofVideoGrabber cam2;
+//        ofxFaceTracker tracker;
         ofVec2f position;
         float scale;
         ofVec3f orientation;
@@ -54,6 +56,10 @@ class ofApp : public ofBaseApp{
     
         // JSON requests
         GSTController controller;
+    
+        // Camera and face tracking
+        CameraThread cameraThread;
+    
 //    std::string userId = "56b8dee9dc6b20e576447b91";
 //    ofxJSONElement json;
 //    std::string movesAccessToken;

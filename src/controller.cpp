@@ -8,8 +8,15 @@
 #include "controller.hpp"
 
 GSTController::GSTController() {
-    
 }
+
+void GSTController::threadedFunction() {
+
+//    while(isThreadRunning()) {
+//
+//    }
+}
+
 
 void GSTController::setAccessTokens() {
     ofxJSONElement response;
