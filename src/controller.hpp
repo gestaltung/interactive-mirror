@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "ofxJSON.h"
-#include "ofxCv.h"
-#include "ofxFaceTracker.h"
 
 using namespace std;
 
@@ -22,6 +20,9 @@ class GSTController : public ofThread {
     void setAccessTokens();
     void setDate(string _date);
     void setAggregateData();
+    void getMetricsForDay();
+    void start();
+    void stop();
     
     // the thread function
     void threadedFunction();
@@ -48,6 +49,10 @@ class GSTController : public ofThread {
 //    ofxJSONElement response;
 //    void setMovesAccessToken();
 //    void setFitbitAccessToken();
+    
+    protected:
+    // A flag to check and see if new data should be retrieved
+    Poco::AtomicCounter shouldRequestNewData;
     
 };
 

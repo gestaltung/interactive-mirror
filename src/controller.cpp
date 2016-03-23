@@ -8,15 +8,40 @@
 #include "controller.hpp"
 
 GSTController::GSTController() {
+    shouldRequestNewData = 0;
 }
 
 void GSTController::threadedFunction() {
-
-//    while(isThreadRunning()) {
-//
-//    }
+    while(isThreadRunning()) {
+        if (lock()) {
+            if (shouldRequestNewData > 0) {
+                shouldRequestNewData = 0;
+                setAggregateData();
+            }
+            
+            // Unlock the mutex
+            unlock();
+        }
+        else {
+            // If we reach this else statement, it means that we could not
+            // lock our mutex, and so we do not need to call unlock().
+            // Calling unlock without locking will lead to problems.
+            ofLogWarning("GSTController::threadedFunction()") << "Unable to lock mutex.";
+        }
+    }
 }
 
+void GSTController::start() {
+    setDate("20160316");
+    setAccessTokens();
+    setAggregateData();
+    shouldRequestNewData = 0;
+    startThread(true);
+}
+
+void GSTController::stop() {
+    stopThread();
+}
 
 void GSTController::setAccessTokens() {
     ofxJSONElement response;
@@ -49,6 +74,10 @@ void GSTController::setDate(string _date) {
     cout << endl << "Setting date";
     cout << endl << currentDate << endl;
     return;
+}
+
+void GSTController::getMetricsForDay() {
+    shouldRequestNewData = 1;
 }
 
 void GSTController::setAggregateData() {
