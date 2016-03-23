@@ -61,6 +61,8 @@ class ofApp : public ofBaseApp{
         // Camera and face tracking
         CameraThread cameraThread;
     
+
+    
 //    std::string userId = "56b8dee9dc6b20e576447b91";
 //    ofxJSONElement json;
 //    std::string movesAccessToken;

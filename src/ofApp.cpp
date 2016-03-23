@@ -5,7 +5,7 @@ using namespace ofxCv;
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
-//    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
+    //    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
     ofBackground(0,0,0);
     ofSetFrameRate(60);
     
@@ -19,17 +19,16 @@ void ofApp::setup(){
     ofClear(255,255,255, 0);
     fbo.end();
     
-//    ofEnableNormalizedTexCoords();
-//    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
+    //    ofEnableNormalizedTexCoords();
+    //    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
     ofDisableArbTex();
     
     
     // start the controller thread
-//    controller.startThread(true);    // blocking, non verbose
     controller.start();
     
     // Start the camera thread
-//    cameraThread.start();
+    //    cameraThread.start();
     
 //    controller.setAccessTokens();
 //    controller.setDate("20160316");
@@ -40,17 +39,17 @@ void ofApp::setup(){
     font.load("futura.ttf", 24);
 
 
-//    cam.initGrabber(1024, 768);
+    //    cam.initGrabber(1024, 768);
     
     shader.load("distortion.vert", "distortion.frag");
     
-//    tracker.setup();
+    //    tracker.setup();
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+//    ofSetWindowTitle(ofToString(ofGetFrameRate()));
 //    cameraThread.cam.update();
     
     // Lock access to the incoming camera resource
@@ -63,25 +62,29 @@ void ofApp::update(){
 //            controller.tracker.update(toCv(controller.cam));
 //        }
 //    }
+    
+    fbo.begin();
+//    cam.draw(0, 0);
+
+//    cameraThread.drawCamera();
+    ofFill();
+    ofSetColor(0, 255, 0);
+    ofDrawRectangle(0,0,400,400);
+
+    fbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     shader.begin();
-    
-//    shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
-    shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
-    shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
-    shader.setUniform1f("u_time", ofGetElapsedTimef());
-    fbo.begin();
-//    cam.draw(0, 0);
+    //    shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
+    //    shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 1);
+    //    shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
+    //    shader.setUniform1f("u_time", ofGetElapsedTimef());
 
-//    cameraThread.drawCamera();
-
-    fbo.end();
-    fbo.draw(0,0);
 
     shader.end();
+//    fbo.draw(0,0);
 //    cameraThread.drawCamera();
 
     drawMetrics();

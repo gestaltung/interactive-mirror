@@ -21,6 +21,8 @@ void GSTController::threadedFunction() {
             
             // Unlock the mutex
             unlock();
+            // Sleep for one second
+            sleep(100);
         }
         else {
             // If we reach this else statement, it means that we could not
