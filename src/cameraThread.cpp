@@ -22,6 +22,9 @@ void CameraThread::threadedFunction() {
             // Unlock the mutex.  This is only
             // called if lock() returned true above.
             unlock();
+            
+            // 60 fps
+            sleep(1000/60);
         }
         else {
             // If we reach this else statement, it means that we could not

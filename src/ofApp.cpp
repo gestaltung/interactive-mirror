@@ -28,11 +28,7 @@ void ofApp::setup(){
     controller.start();
     
     // Start the camera thread
-    //    cameraThread.start();
-    
-//    controller.setAccessTokens();
-//    controller.setDate("20160316");
-//    controller.setAggregateData();
+    cameraThread.start();
     
     noiseTex.load("noiseTex.png");
     
@@ -40,16 +36,14 @@ void ofApp::setup(){
 
 
     //    cam.initGrabber(1024, 768);
-    
     shader.load("distortion.vert", "distortion.frag");
-    
     //    tracker.setup();
     
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-//    ofSetWindowTitle(ofToString(ofGetFrameRate()));
+    ofSetWindowTitle(ofToString(ofGetFrameRate()));
 //    cameraThread.cam.update();
     
     // Lock access to the incoming camera resource
@@ -85,7 +79,7 @@ void ofApp::draw(){
 
     shader.end();
 //    fbo.draw(0,0);
-//    cameraThread.drawCamera();
+    cameraThread.drawCamera();
 
     drawMetrics();
     
