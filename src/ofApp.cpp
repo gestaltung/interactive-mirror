@@ -79,9 +79,7 @@ void ofApp::draw(){
 
     shader.end();
 //    fbo.draw(0,0);
-    cameraThread.drawCamera();
-
-    drawMetrics();
+    controller.drawMetrics(WIDTH, HEIGHT);
     
     
 //    if(tracker.getFound()) {

@@ -23,6 +23,7 @@ class GSTController : public ofThread {
     void getMetricsForDay();
     void start();
     void stop();
+    void drawMetrics(int WIDTH, int HEIGHT);
     
     // the thread function
     void threadedFunction();

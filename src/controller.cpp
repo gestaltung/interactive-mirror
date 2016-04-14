@@ -72,14 +72,35 @@ void GSTController::setAccessTokens() {
 }
 
 void GSTController::setDate(string _date) {
-    currentDate = _date;
-    cout << endl << "Setting date";
-    cout << endl << currentDate << endl;
+    if (lock()) {
+        currentDate = _date;
+        cout << endl << "Setting date";
+        cout << endl << currentDate << endl;
+        unlock();
+    }
+
     return;
 }
 
 void GSTController::getMetricsForDay() {
     shouldRequestNewData = 1;
+}
+
+void GSTController::drawMetrics(int WIDTH, int HEIGHT) {
+    if (lock()) {
+        ofColor(255, 255, 255);
+        cout << "Inside drawMetrics function " << WIDTH << HEIGHT << endl;
+        
+        ofDrawBitmapString(currentDate.substr(0,4), 20, HEIGHT-80);
+        ofDrawBitmapString("/" + currentDate.substr(4,2), 130, HEIGHT-80);
+        ofDrawBitmapString("/" + currentDate.substr(6,2), 205, HEIGHT-80);
+        ofDrawBitmapString(ofToString(overallDistance) + " KM", 20, HEIGHT-40);
+        ofDrawBitmapString(ofToString(totalSteps) + " STEPS", 20, HEIGHT-10);
+        unlock();
+    }
+    else {
+        ofLogWarning("GSTController.drawMetrics") << "Unable to lock mutex";
+    }
 }
 
 void GSTController::setAggregateData() {
@@ -96,18 +117,27 @@ void GSTController::setAggregateData() {
     cout << "url is " << url << endl;
     
     bool parsingSuccessful = response.open(url);
-    if (parsingSuccessful) {
-        walkingDuration = response["walking"]["duration"].asFloat();
-        walkingDistance = response["walking"]["distance"].asFloat();
-        transportDuration = response["transport"]["duration"].asFloat();
-        transportDistance = response["transport"]["distance"].asFloat();
-        overallDistance = response["distance"].asFloat();
-        totalSteps = response["totalSteps"].asFloat();
-        cout << "Parsed successfully" << endl;
-    }
-    else {
-        ofLogError("GSTController::getAggregateData") << "Can't parse response";
-    }
+//    if (lock()) {
+        if (parsingSuccessful) {
+            walkingDuration = response["walking"]["duration"].asFloat();
+            walkingDistance = response["walking"]["distance"].asFloat();
+            transportDuration = response["transport"]["duration"].asFloat();
+            transportDistance = response["transport"]["distance"].asFloat();
+            overallDistance = response["distance"].asFloat();
+            totalSteps = response["totalSteps"].asFloat();
+            cout << "Parsed successfully" << endl;
+            cout << "Total Steps: " << totalSteps << endl;
+            cout << "Overal Distance: " << overallDistance << endl;
+        }
+        else {
+            ofLogError("GSTController::getAggregateData") << "Can't parse response";
+        }
+//        unlock();
+
+//    }
+//    else {
+//        ofLogNotice("GSTController::setAggregateData") << "Failed to lock";
+//    }
     
     return;
 }
