@@ -25,18 +25,12 @@ class CameraThread : public ofThread {
     void drawCamera();
     ofTexture getCameraTexture();
     
-    
-    CameraThread() {
-//        cam.setUseTexture(false);
-//        cam.initGrabber(1024, 768);
-//        tracker.setup();
-    };
-    
     ofTexture camTex;
     
     protected:
     // Camera and face tracking
     ofVideoGrabber cam;
+    ofPixels vidPixels;
     ofxFaceTracker tracker;
 
 };

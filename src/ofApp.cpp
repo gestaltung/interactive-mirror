@@ -19,7 +19,7 @@ void ofApp::setup(){
     ofClear(255,255,255, 0);
     fbo.end();
     
-    //    ofEnableNormalizedTexCoords();
+    ofEnableNormalizedTexCoords();
     //    ofSetOrientation(OF_ORIENTATION_DEFAULT,false);
     ofDisableArbTex();
     
@@ -57,28 +57,28 @@ void ofApp::update(){
 //        }
 //    }
     
-    fbo.begin();
+//    fbo.begin();
 //    cam.draw(0, 0);
 
 //    cameraThread.drawCamera();
-    ofFill();
-    ofSetColor(0, 255, 0);
-    ofDrawRectangle(0,0,400,400);
+//    ofFill();
+//    ofSetColor(0, 255, 0);
+//    ofDrawRectangle(0,0,400,400);
 
-    fbo.end();
+//    fbo.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
     shader.begin();
-    //    shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
-    //    shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 1);
-    //    shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
-    //    shader.setUniform1f("u_time", ofGetElapsedTimef());
-
-
+        shader.setUniformTexture("srcTex", cameraThread.getCameraTexture(), 1);
+        shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 1);
+        shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
+        shader.setUniform1f("u_time", ofGetElapsedTimef());
+        cameraThread.drawCamera();
     shader.end();
-//    fbo.draw(0,0);
+    
+//    cameraThread.drawCamera();
     controller.drawMetrics(WIDTH, HEIGHT);
     
     
@@ -90,16 +90,6 @@ void ofApp::draw(){
 
 }
 
-//--------------------------------------------------------------
-void ofApp::drawMetrics(){
-    ofColor(255, 255, 255);
-    
-    font.drawString(controller.currentDate.substr(0,4), 20, HEIGHT-80);
-    font.drawString("/" + controller.currentDate.substr(4,2), 130, HEIGHT-80);
-    font.drawString("/" + controller.currentDate.substr(6,2), 205, HEIGHT-80);
-    font.drawString(ofToString(controller.overallDistance) + " KM", 20, HEIGHT-40);
-    font.drawString(ofToString(controller.totalSteps) + " STEPS", 20, HEIGHT-10);
-}
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
@@ -110,17 +100,11 @@ void ofApp::keyPressed(int key){
     if (key==OF_KEY_LEFT) {
         controller.setDate("20160314");
         controller.getMetricsForDay();
-        
-        // If you don't want to do multithreaded, uncomment below
-        // controller.setAggregateData();
     }
     
     if (key==OF_KEY_RIGHT) {
         controller.setDate("20160315");
         controller.getMetricsForDay();
-        
-        // If you don't want to do multithreaded, uncomment below
-        // controller.setAggregateData();
     }
 }
 

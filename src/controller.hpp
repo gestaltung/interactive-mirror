@@ -43,6 +43,8 @@ class GSTController : public ofThread {
     float overallDistance;
     float totalSteps;
     
+    ofTrueTypeFont font;
+    
 
     GSTController();
     

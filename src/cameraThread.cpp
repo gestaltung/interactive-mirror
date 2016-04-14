@@ -7,10 +7,6 @@
 
 #include "cameraThread.hpp"
 
-//CameraThread::CameraThread() {
-//    cam.initGrabber(1024, 768);
-//    tracker.setup();
-//}
 
 void CameraThread::threadedFunction() {
     while (isThreadRunning()) {
@@ -18,13 +14,25 @@ void CameraThread::threadedFunction() {
     
         //  Try to lock thread
         if (lock()) {
-            cam.update();
-            // Unlock the mutex.  This is only
-            // called if lock() returned true above.
+            // cam.update();
+            
+            // or this
+            if (cam.isFrameNew()) {
+                cam.update();
+                
+                ofPixels &pixels = cam.getPixels();
+                for(int i = 0; i < pixels.size(); i++) {
+                    vidPixels[i] = pixels[i];
+                }
+                camTex.loadData(vidPixels);
+            }
+            
+//            drawCamera();
+
             unlock();
             
             // 60 fps
-            sleep(1000/60);
+            // sleep(1000/60);
         }
         else {
             // If we reach this else statement, it means that we could not
@@ -42,9 +50,12 @@ void CameraThread::threadedFunction() {
 
 /// Start the thread.
 void CameraThread::start() {
-    camTex.allocate(1024, 768, GL_RGBA);
-    cam.initGrabber(1024, 768, false);
-    tracker.setup();
+    vidPixels.allocate(1024,768,OF_PIXELS_RGB);
+    camTex.allocate(vidPixels);
+//    cam.initGrabber(1024, 768, false);
+    cam.initGrabber(1024, 768);
+    cam.setUseTexture(true);
+//    tracker.setup();
     // Mutex blocking is set to true by default
     // It is rare that one would want to use startThread(false).
     startThread();
@@ -74,11 +85,13 @@ ofTexture CameraThread::getCameraTexture() {
 // includes OpenGL calls.
 void CameraThread::drawCamera() {
     if (lock()) {
-        stringstream ss;
-        ss << "I am a slowly increasing thread. " << endl;
-        ss << "My current count is: ";
-        ofDrawBitmapString(ss.str(), 50, 56);
-        cam.draw(0,0);
+//        stringstream ss;
+//        ss << "I am a slowly increasing thread. " << endl;
+//        ss << "My current count is: ";
+//        ofDrawBitmapString(ss.str(), 50, 56);
+//    camTex.draw(0,0);
+    cam.draw(0,0);
+
         unlock();
     }
     else {
