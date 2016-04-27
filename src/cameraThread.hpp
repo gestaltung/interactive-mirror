@@ -23,15 +23,14 @@ class CameraThread : public ofThread {
     void start();
     void stop();
     void drawCamera();
-    ofTexture getCameraTexture();
+    void setup();
     
-    ofTexture camTex;
+    ofVideoGrabber cam;
+    ofImage image;
     
     protected:
     // Camera and face tracking
-    ofVideoGrabber cam;
-    ofPixels vidPixels;
-    ofxFaceTracker tracker;
+    // ofxFaceTracker tracker;
 
 };
 

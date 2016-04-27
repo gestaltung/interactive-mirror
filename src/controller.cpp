@@ -25,9 +25,6 @@ void GSTController::threadedFunction() {
             // sleep(1000);
         }
         else {
-            // If we reach this else statement, it means that we could not
-            // lock our mutex, and so we do not need to call unlock().
-            // Calling unlock without locking will lead to problems.
             ofLogWarning("GSTController::threadedFunction()") << "Unable to lock mutex.";
         }
     }

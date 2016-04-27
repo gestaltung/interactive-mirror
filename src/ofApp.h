@@ -33,10 +33,6 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-    
-//        ofVideoGrabber cam;
-//        ofVideoGrabber cam2;
-//        ofxFaceTracker tracker;
         ofVec2f position;
         float scale;
         ofVec3f orientation;
@@ -59,11 +55,5 @@ class ofApp : public ofBaseApp{
     
         // Camera and face tracking
         CameraThread cameraThread;
-    
-
-    
-//    std::string userId = "56b8dee9dc6b20e576447b91";
-//    ofxJSONElement json;
-//    std::string movesAccessToken;
-		
+        ofTexture videoTexture;
 };
