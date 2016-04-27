@@ -5,6 +5,7 @@ using namespace ofxCv;
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(true);
+    ofSetDrawBitmapMode(OF_BITMAPMODE_MODEL_BILLBOARD);
     ofBackground(0,0,0);
     ofSetFrameRate(60);
     
@@ -26,16 +27,18 @@ void ofApp::setup(){
     // start the controller thread
     controller.start();
     
+    // Setup face tracking
+    tracker.setup();
+    
     // Start the camera thread
     videoTexture.allocate(1024,768,GL_RGB);
     cameraThread.setup();
     cameraThread.start();
     
     noiseTex.load("noiseTex.png");
+    shader.load("distortion.vert", "distortion.frag");
     
     font.load("futura.ttf", 24);
-
-    shader.load("distortion.vert", "distortion.frag");    
 }
 
 //--------------------------------------------------------------
@@ -43,7 +46,20 @@ void ofApp::update(){
     ofSetWindowTitle(ofToString(ofGetFrameRate()));
     cameraThread.lock();
     videoTexture.loadData(cameraThread.image);
+    tracker.update(toCv(cameraThread.image));
     cameraThread.unlock();
+
+//    position = tracker.getPosition();
+//    scale = tracker.getScale();
+//    orientation = tracker.getOrientation();
+//    rotationMatrix = tracker.getRotationMatrix();
+//    
+    if(ofGetFrameNum()%60 == 0) {
+        if (tracker.getFound()) {
+            std::cout << "Tracker Found" << endl;
+        }
+
+    }
 }
 
 //--------------------------------------------------------------
@@ -55,6 +71,18 @@ void ofApp::draw(){
     shader.setUniform1f("u_time", ofGetElapsedTimef());
     videoTexture.draw(0,0);
     shader.end();
+    
+//    if(tracker.getFound()) {
+//        ofSetLineWidth(1);
+//        tracker.draw();
+//        
+//        ofSetupScreenOrtho(640, 480, -1000, 1000);
+//        ofTranslate(640 / 2, 480 / 2);
+//        applyMatrix(rotationMatrix);
+//        ofScale(5,5,5);
+//        ofDrawAxis(scale);
+//        tracker.getObjectMesh().drawWireframe();
+//    }
 
     controller.drawMetrics(WIDTH, HEIGHT);
 }
@@ -81,6 +109,7 @@ void ofApp::keyPressed(int key){
 void ofApp::exit() {
     cameraThread.stop();
     controller.stop();
+    tracker.stopThread();
 }
 
 //--------------------------------------------------------------

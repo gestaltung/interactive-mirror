@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxCv.h"
-#include "ofxFaceTracker.h"
+#include "ofxFaceTrackerThreaded.h"
 #include "ofxJSON.h"
 #include "controller.hpp"
 #include "cameraThread.hpp"
@@ -33,17 +33,18 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        ofVec2f position;
-        float scale;
-        ofVec3f orientation;
-        ofMatrix4x4 rotationMatrix;
-    
         int WIDTH, HEIGHT;
     
         ofShader shader;
         ofImage noiseTex;
         ofFbo fbo;
     
+        // Threaded FaceTracker specific
+        ofxFaceTrackerThreaded tracker;
+        ofVec2f position;
+        float scale;
+        ofVec3f orientation;
+        ofMatrix4x4 rotationMatrix;
         Mat translation, rotation;
         ofMatrix4x4 pose;
         
