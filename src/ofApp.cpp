@@ -35,6 +35,8 @@ void ofApp::setup(){
     cameraThread.setup();
     cameraThread.start();
     
+    mode = REFLECT_MODE;
+    
     noiseTex.load("noiseTex.png");
     shader.load("distortion.vert", "distortion.frag");
     
@@ -49,42 +51,33 @@ void ofApp::update(){
     tracker.update(toCv(cameraThread.image));
     cameraThread.unlock();
 
-//    position = tracker.getPosition();
-//    scale = tracker.getScale();
-//    orientation = tracker.getOrientation();
-//    rotationMatrix = tracker.getRotationMatrix();
-//    
     if(ofGetFrameNum()%60 == 0) {
         if (tracker.getFound()) {
+            mode = DISPLAY_MODE;
             std::cout << "Tracker Found" << endl;
         }
-
+        else {
+            mode = REFLECT_MODE;
+        }
     }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    shader.begin();
-    shader.setUniformTexture("srcTex", videoTexture, 1);
-    shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
-    shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
-    shader.setUniform1f("u_time", ofGetElapsedTimef());
-    videoTexture.draw(0,0);
-    shader.end();
-    
-//    if(tracker.getFound()) {
-//        ofSetLineWidth(1);
-//        tracker.draw();
-//        
-//        ofSetupScreenOrtho(640, 480, -1000, 1000);
-//        ofTranslate(640 / 2, 480 / 2);
-//        applyMatrix(rotationMatrix);
-//        ofScale(5,5,5);
-//        ofDrawAxis(scale);
-//        tracker.getObjectMesh().drawWireframe();
-//    }
 
-    controller.drawMetrics(WIDTH, HEIGHT);
+    if (mode == 0) {
+        ofBackground(0,0,0);
+    }
+    else {
+        shader.begin();
+        shader.setUniformTexture("srcTex", videoTexture, 1);
+        shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
+        shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
+        shader.setUniform1f("u_time", ofGetElapsedTimef());
+        videoTexture.draw(0,0);
+        shader.end();
+        controller.drawMetrics(WIDTH, HEIGHT);
+    }
 }
 
 

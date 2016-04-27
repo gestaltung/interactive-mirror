@@ -10,8 +10,8 @@
 using namespace ofxCv;
 using namespace cv;
 
-#define DISPLAY_MODE 0;
-#define PASSIVE_MODE 1;
+#define DISPLAY_MODE 1;
+#define REFLECT_MODE 0;
 
 class ofApp : public ofBaseApp{
 
@@ -50,6 +50,8 @@ class ofApp : public ofBaseApp{
         
         ofEasyCam easyCam;
         ofTrueTypeFont font;
+    
+        int mode;
     
         // JSON requests
         GSTController controller;
