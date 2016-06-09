@@ -13,6 +13,7 @@ uniform sampler2D srcTex;
 uniform sampler2D noiseTex;
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform float u_muddiness;
 varying vec4 vertTexCoord;
 
 vec4 rgbShift( in vec2 p , in vec4 shift) {
@@ -49,7 +50,7 @@ void main()
      // Elevating shift values to some high power (between 8 and 16 looks good)
      // helps make the stuttering look more sudden
      vec4 shift = vec4pow(noise(vec2(SPEED*u_time,2.0*SPEED*u_time/25.0 )),6.0)
-               *vec4(AMPLITUDE,AMPLITUDE,AMPLITUDE,1.0);
+               *vec4(u_muddiness,u_muddiness,u_muddiness,1.0);
 
      c += rgbShift(p, shift);
 

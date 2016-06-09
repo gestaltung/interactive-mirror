@@ -32,7 +32,7 @@ void GSTController::threadedFunction() {
 
 void GSTController::start() {
     font.load("futura.ttf", 24);
-    setDate("20160316");
+    setDate("20160317");
     setAccessTokens();
     setAggregateData();
     shouldRequestNewData = 0;

@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+using namespace cv;
 using namespace ofxCv;
 
 //--------------------------------------------------------------
@@ -74,8 +75,15 @@ void ofApp::draw(){
         shader.setUniformTexture("noiseTex", noiseTex.getTexture(), 2);
         shader.setUniform2f("u_resolution", WIDTH, HEIGHT);
         shader.setUniform1f("u_time", ofGetElapsedTimef());
+        // 10,000 steps is daily recommended number by the American Heart Association
+        shader.setUniform1f("u_muddiness", ofMap(controller.totalSteps, 10000, 0, 0, 0.6, true));
         videoTexture.draw(0,0);
         shader.end();
+        
+//        tracker.draw();
+//        ofPolyline noseBase = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE);
+//        noseBase.draw();
+//        ofCircle(noseBase.getCentroid2D(), 8 * tracker.getScale());
         controller.drawMetrics(WIDTH, HEIGHT);
     }
 }
@@ -88,7 +96,7 @@ void ofApp::keyPressed(int key){
     }
     
     if (key==OF_KEY_LEFT) {
-        controller.setDate("20160314");
+        controller.setDate("20160316");
         controller.getMetricsForDay();
     }
     

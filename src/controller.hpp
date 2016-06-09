@@ -29,7 +29,7 @@ class GSTController : public ofThread {
     void threadedFunction();
 
     const string USER_ID = "56ee6e2bed8de9a62ef25452";
-    const string APP_URL = "http://zac.local:3000/";
+    const string APP_URL = "http://localhost:3000/";
     string movesAccessToken;
     string fitbitAccessToken;
     string userID;
